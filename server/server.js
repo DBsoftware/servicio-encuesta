@@ -33,5 +33,5 @@ app.delete('/encuesta/:id', function(req, res) {
 })
 
 app.listen(process.env.PORT, () => {
-    console.log('Escuchando puerto:' + process.env.PORT);
+    console.log(`Escuchando puerto: ${process.env.PORT}`);
 })
