@@ -30,10 +30,7 @@ exports.list_all_encuestas = (req, res) => {
 exports.create_encuesta = (req, res) => {
     let body = req.body;
 
-    let encuesta = new Encuesta({
-        cedula: body.cedula,
-        p1: body.p1
-    });
+    let encuesta = new Encuesta(body);
     encuesta.save((err, encuestaDB) => {
         if (err) {
             return res.status(400).json({
@@ -52,8 +49,6 @@ exports.create_encuesta = (req, res) => {
 exports.update_encuesta = (req, res) => {
     let id = req.params.id;
     let body = req.body;
-
-    delete body.cedula;
 
     Encuesta.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, encuestaDB) => {
         if (err) {
