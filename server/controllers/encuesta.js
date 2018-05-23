@@ -27,6 +27,24 @@ exports.list_all_encuestas = (req, res) => {
         });
 };
 
+exports.get_encuestaByID = (req, res) => {
+    let id = req.params.id;
+
+    Encuesta.findOne({ 'cedula': id }, {}, { sort: { 'fecha': -1 } }, (err, encuestaDB) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+
+        res.json({
+            ok: true,
+            encuesta: encuestaDB
+        })
+    })
+}
+
 exports.create_encuesta = (req, res) => {
     let body = req.body;
 

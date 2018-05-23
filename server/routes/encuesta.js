@@ -4,6 +4,7 @@ const app = express()
 var encuestaCtrllr = require('../controllers/encuesta');
 
 app.get('/encuesta', encuestaCtrllr.list_all_encuestas);
+app.get('/encuesta/:id', encuestaCtrllr.get_encuestaByID);
 
 app.post('/encuesta', encuestaCtrllr.create_encuesta);
 
