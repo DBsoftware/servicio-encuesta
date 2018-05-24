@@ -4,105 +4,59 @@
 var mongoose = require('mongoose'),
     Encuesta = mongoose.model('Encuesta');
 
-exports.list_all_encuestas = (req, res) => {
-    let desde = req.query.desde || 0;
-    desde = Number(desde);
-    let limite = req.query.limite || 0;
-    limite = Number(limite);
-    Encuesta.find({})
-        .skip(desde)
-        .limit(limite)
-        .exec((err, encuestas) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-
-            res.json({
-                ok: true,
-                encuestas
-            });
-        });
-};
-
-exports.get_encuestaByID = (req, res) => {
-    let id = req.params.id;
-
-    Encuesta.findOne({ 'cedula': id }, {}, { sort: { 'fecha': -1 } }, (err, encuestaDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        res.json({
-            ok: true,
-            encuesta: encuestaDB
-        })
-    })
+let errorResp = (r) => {
+    return r.status(400).json({
+        ok: false,
+        err
+    });
 }
-
-exports.create_encuesta = (req, res) => {
-    let body = req.body;
-
-    let encuesta = new Encuesta(body);
-    encuesta.save((err, encuestaDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
+let errorRespUnq = (r) => {
+    return res.status(400).json({
+        ok: false,
+        err: {
+            message: 'Encuesta no encontrada'
         }
-
-        res.json({
-            ok: true,
-            encuesta: encuestaDB
-        })
+    });
+}
+let validRespond = (r, encuesta) => {
+    r.json({
+        ok: true,
+        encuesta
     });
 }
 
+exports.list_all_encuestas = (req, res) => {
+    let desde = Number(req.query.desde) || 0;
+    let limite = Number(req.query.limite) || 0;
+    Encuesta.find({})
+        .skip(desde)
+        .limit(limite)
+        .exec((err, encuesta) => (err) ? errorResp(res) : validRespond(res, encuesta));
+};
+
+exports.get_encuestaByID = (req, res) => {
+    Encuesta.findOne({ 'cedula': req.params.id }, {}, { sort: { 'fecha': -1 } },
+        (err, encuesta) => (err) ? errorResp(res) : validRespond(res, encuesta))
+}
+
+exports.create_encuesta = (req, res) => {
+    new Encuesta(req.body).save(
+        (err, encuesta) => (err) ? errorResp(res) : validRespond(res, encuesta)
+    );
+}
+
 exports.update_encuesta = (req, res) => {
-    let id = req.params.id;
-    let body = req.body;
-
-    Encuesta.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, encuestaDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        res.json({
-            ok: true,
-            encuesta: encuestaDB
-        })
-    })
+    Encuesta.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true },
+        (err, encuesta) => (err) ? errorResp(res) : validRespond(res, encuesta)
+    )
 }
 exports.delete_encuesta = (req, res) => {
-    let id = req.params.id;
-    Encuesta.findByIdAndRemove(id, (err, encuestaBorrada) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-        if (!encuestaBorrada) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'Usario no encontrado'
-                }
-            });
-        }
-        res.json({
-            ok: true,
-            encuesta: encuestaBorrada
+    Encuesta.findByIdAndRemove(req.params.id,
+        (err, encuesta) => {
+            if (err)
+                errorResp(res);
+            if (!encuesta)
+                errorRespUnq(res);
+            validRespond(res, encuesta);
         })
-
-    })
 }

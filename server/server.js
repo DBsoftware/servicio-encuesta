@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors());
 
-app.use(require('./routes/encuesta'));
+app.use(require('./routes/index'));
 
 mongoose.connect(process.env.URLDB, (err, res) => {
     if (err) throw err;

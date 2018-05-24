@@ -2,25 +2,18 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 let Schema = mongoose.Schema;
-let encuestaSchema = new Schema({
-    cedula: {
+let userSchema = new Schema({
+    user: {
+        type: String,
+        unique: true,
+        required: [true, 'Estos campos son necesarios']
+    },
+    pass: {
         type: String,
         required: [true, 'Estos campos son necesarios']
     },
-    s1: {
-        type: Array,
-        required: [true, 'Estos campos son necesarios']
-    },
-    s2: {
-        type: Array,
-        required: [true, 'Estos campos son necesarios']
-    },
-    s3: {
-        type: Array,
-        required: [true, 'Estos campos son necesarios']
-    },
-    s4: {
-        type: Array,
+    role: {
+        type: String,
         required: [true, 'Estos campos son necesarios']
     },
     fecha: {
@@ -30,5 +23,6 @@ let encuestaSchema = new Schema({
     }
 });
 
+userSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser unico' });
 
-module.exports = mongoose.model('Encuesta', encuestaSchema);
+module.exports = mongoose.model('User', userSchema);
