@@ -23,6 +23,42 @@ let encuestaSchema = new Schema({
         type: Array,
         required: [true, 'Estos campos son necesarios']
     },
+    s5: {
+        type: Array,
+        required: [true, 'Estos campos son necesarios']
+    },
+    s6: {
+        type: Array,
+        required: [true, 'Estos campos son necesarios']
+    },
+    s7: {
+        type: Array,
+        required: [true, 'Estos campos son necesarios']
+    },
+    s8: {
+        type: Array,
+        required: [true, 'Estos campos son necesarios']
+    },
+    s9: {
+        type: Array,
+        required: [true, 'Estos campos son necesarios']
+    },
+    s10: {
+        type: Array,
+        required: [true, 'Estos campos son necesarios']
+    },
+    s11: {
+        type: Array,
+        required: [true, 'Estos campos son necesarios']
+    },
+    s12: {
+        type: Array,
+        required: [true, 'Estos campos son necesarios']
+    },
+    s13: {
+        type: Array,
+        required: [true, 'Estos campos son necesarios']
+    },
     fecha: {
         type: Date,
         default: Date.now,
